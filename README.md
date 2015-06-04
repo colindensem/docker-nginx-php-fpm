@@ -1,5 +1,5 @@
-# nginx-php-fpm
-Docker, Ubuntu base, NGINX, PHP-FPM running with supervisor. Sourcing NGINX from the nginx repository.
+# php-fpm
+Docker, Debian base, PHP-FPM, listening on 9000 for work.
 
 Core PHP packages are:
 ```
@@ -11,42 +11,23 @@ php5-imap, php5-mcrypt, php5-memcache, php5-mysql, php5-redis
 ## To Build
 
 ```
-$ docker build -t=colindensem/nginx-php-fpm -rm=true .
+$ docker build -t=colindensem/php-fpm -rm=true .
 ```
 
 ## To Run
 
 ```
-$ docker run -i -p 8080:80 colindensem/nginx-php-fpm
+$ docker run -i -p 9000:9000 colindensem/php-fpm
 ```
 
-Go to http://127.0.0.1:8080, if using boot2docker, replace ip accordingly.
-
-If successful you will see a phpinfo() output.
 
 ## Next Steps
 This is intended to use this image as a base for other projects to build upon. In that sense, it possibly does to much already, i.e. begins configuration tasks.
 
 At this point it is usable to develop against for php sites. You will need to add modules/ini settings for your needs.
 
-NGINX is configured to look for files in /srv/application/public.
+You probabbly need a static assets handler to proxy to this https://github.com/colindensem/docker-nginx-proxy-php
 
-You need to map your application to that directory.
-There are two ONBUILD hooks, these will run when you use this in another build, e.g. your project for a static page.
-
-```
-ONBUILD ADD ./application /srv/application
-ONBUILD RUN chown -Rf www-data.www-data /srv/application
-```
-
-These will be run early on.  For development, you can launch using the volumes flag -v
-
-```
-$ docker run -i -p 8080:80 -v \
- /home/user/workspace/project:/srv/http/application \
- --name project \
- colindensem/nginx-php-fpm
-```
 
 ## TODO
 
